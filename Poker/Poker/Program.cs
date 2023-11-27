@@ -12,8 +12,6 @@ namespace poker
 {
 	class Program
 	{
-		public static void Main(string[] args)
-		{
 			//
 			// DECLARATION DES DONNEES
 			//
@@ -71,15 +69,14 @@ namespace poker
 			public static carte[] MonJeu = new carte[5];
 			
 			// Test de la combinaison
-			switch (cherche_combinaison(unJeu))
+			switch (chercheCombinaison(unJeu))
 			{
 			case combinaison.RIEN :
 				afficher_message("rien du tout... desole!", couleur.ROUGE, new coordonnees { x = 24, y = 15 });
 				break;
 			case combinaison.PAIRE:
+				...}
 			
-			Console.ReadKey(true);
-		}
 		// Génère aléatoirement une carte : {valeur;famille}
 		// Retourne une expression de type "carte"
 		private static carte tirage(){
@@ -90,8 +87,17 @@ namespace poker
 		// Paramètres : une carte, le jeu 5 cartes, le numéro de la carte dans le jeu
 		// Retourne un booléen
 		
-		private static bool carteUnique(carte uneCarte, carte[] unJeu, int numero)
 		// Affiche à l'écran une carte {valeur;famille}
+		private static bool carteUnique(carte uneCarte, carte[] unJeu, int numero)
+		{
+			foreach(carte element in unJeu){
+				if (element == uneCarte) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
 
 		private static void affichageCarte(carte uneCarte)
 		// Tirage d'un jeu de 5 cartes
@@ -124,15 +130,30 @@ namespace poker
 		(char)uneCarte.famille, '|'), lacouleur, new coordonnees { x = colonne * 15, y = 2 }
 		);
 			
-			
+		// Tirage d'un jeu de 5 cartes
+		// Paramètre : le tableau de 5 cartes à remplir
+		private static void tirageDuJeu(carte[] unJeu)
+		// Echange des cartes
+		// Paramètres : le tableau de 5 cartes et le tableau des numéros des cartes à échanger
+		private static void echangeDeCartes(carte[] unJeu, int[] e)
+		// Calcule et retourne la combinaison (paire, double-paire…) pour un jeu complet de 5 cartes
+		// La valeur retournée est un élement de l'énumération 'combinaison'
+		private static combinaison chercheCombinaison(carte[] unJeu)
+		
 		private static void afficheResultat(carte [] unJeu)
 		// Enregistrer le jeu dans un fichier
 			
 		private static void enregistrerJeu(carte [] unJeu)
 		// Voir les scores depuis le fichier private static void voirScores()
 		// Jouer au poker
-			
+		
+		// Voir les scores depuis le fichier 
+		private static void voirScores()
+		
 		public static void jouerAuPoker(carte [] leJeu)
 		// Affiche le menu du jeu et retourne l'option choisie public static char afficherMenu()
+		
+		// Affiche le menu du jeu et retourne l'option choisie 
+		public static char afficherMenu()
 	}
 }
