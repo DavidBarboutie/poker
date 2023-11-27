@@ -7,6 +7,11 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.IO;
+using System.Text;
+using System.Runtime.InteropServices;
+
+
 
 namespace poker
 {
@@ -66,16 +71,10 @@ namespace poker
 			public static int [] echange = {0,0,0,0};
 			
 			// Jeu de 5 cartes
-			public static carte[] MonJeu = new carte[5];
+			public static carte[] unJeu = new carte[5];
 			
 			// Test de la combinaison
-			switch (chercheCombinaison(unJeu))
-			{
-			case combinaison.RIEN :
-				afficher_message("rien du tout... desole!", couleur.ROUGE, new coordonnees { x = 24, y = 15 });
-				break;
-			case combinaison.PAIRE:
-				...}
+			//switch case
 			
 		// Génère aléatoirement une carte : {valeur;famille}
 		// Retourne une expression de type "carte"
@@ -91,7 +90,7 @@ namespace poker
 		private static bool carteUnique(carte uneCarte, carte[] unJeu, int numero)
 		{
 			foreach(carte element in unJeu){
-				if (element == uneCarte) {
+				if (element.valeur == uneCarte.valeur && element.famille == uneCarte.famille) {
 					return true;
 				}
 			}
@@ -99,61 +98,62 @@ namespace poker
 		}
 		
 
-		private static void affichageCarte(carte uneCarte)
-		// Tirage d'un jeu de 5 cartes
-		// Paramètre : le tableau de 5 cartes à remplir private static void tirageDuJeu(carte[] unJeu)
-		// Echange des cartes
-		// Paramètres : le tableau de 5 cartes et le tableau des numéros des cartes à échanger private static void echangeDeCartes(carte[] unJeu, int[] e)
-		// Calcule et retourne la combinaison (paire, double-paire…) pour un jeu complet de 5 cartes
-		// La valeur retournée est un élement de l'énumération 'combinaison' private static combinaison chercheCombinaison(carte[] unJeu)
-		// Calcul et affichage du résultat
-		// Paramètre : le tableau de 5 cartes
-		
-		// Choix de la couleur
-		// * couleur.ROUGE pour coeur et carreau
-		// * couleur.NOIRE pour trèfle et pique couleur lacouleur;
-		if (uneCarte.famille == 3 || uneCarte.famille == 4) lacouleur = couleur.ROUGESURBLANC;
-		Affichage de la carte depuis le haut :
-		else
-		lacouleur = couleur.NOIRESURBLANC;
-		// Positionnement et affichage
-		// REMARQUE : dans la fenêtre exécution, choisir "Police Roster" pour afficher les symboles... afficher_message
-		(
-		string.Format("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n",'*','-','-','-','-','-','-','-','-','-','*'),
-		lacouleur,
-		new coordonnees {x= colonne * 15, y=1 }
-		);
-		afficher_message (
-		string.Format("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n",'|',
-		(char)uneCarte.famille,' ', (char)uneCarte.famille,' ', (char)uneCarte.famille,' ',
-		(char)uneCarte.famille,' ',
-		(char)uneCarte.famille, '|'), lacouleur, new coordonnees { x = colonne * 15, y = 2 }
-		);
+		private static void affichageCarte(carte uneCarte){
+			// Tirage d'un jeu de 5 cartes
+			// Paramètre : le tableau de 5 cartes à remplir private static void tirageDuJeu(carte[] unJeu)
+			// Echange des cartes
+			// Paramètres : le tableau de 5 cartes et le tableau des numéros des cartes à échanger private static void echangeDeCartes(carte[] unJeu, int[] e)
+			// Calcule et retourne la combinaison (paire, double-paire…) pour un jeu complet de 5 cartes
+			// La valeur retournée est un élement de l'énumération 'combinaison' private static combinaison chercheCombinaison(carte[] unJeu)
+			// Calcul et affichage du résultat
+			// Paramètre : le tableau de 5 cartes
 			
+			// Choix de la couleur
+			// * couleur.ROUGE pour coeur et carreau
+			// * couleur.NOIRE pour trèfle et pique
+			/////int colonne = Console.GetCursorPosition();
+			couleur lacouleur;
+			if (uneCarte.famille == 3 || uneCarte.famille == 4){
+				lacouleur = couleur.ROUGESURBLANC;}
+			else
+			{
+				lacouleur = couleur.NOIRESURBLANC;
+				// Positionnement et affichage
+				// REMARQUE : dans la fenêtre exécution, choisir "Police Roster" pour afficher les symboles...
+				Console.WriteLine
+				(string.Format("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n",'*','-','-','-','-','-','-','-','-','-','*'), lacouleur, new coordonnees {x= colonne * 15, y=1 });
+				Console.WriteLine (
+				string.Format("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n",'|',
+				(char)uneCarte.famille,' ', (char)uneCarte.famille,' ', (char)uneCarte.famille,' ',
+				(char)uneCarte.famille,' ',
+				(char)uneCarte.famille, '|'), lacouleur, new coordonnees { x = colonne * 15, y = 2 }
+				);
+			}
+		}
 		// Tirage d'un jeu de 5 cartes
 		// Paramètre : le tableau de 5 cartes à remplir
-		private static void tirageDuJeu(carte[] unJeu)
+		private static void tirageDuJeu(carte[] unJeu){}
 		// Echange des cartes
 		// Paramètres : le tableau de 5 cartes et le tableau des numéros des cartes à échanger
-		private static void echangeDeCartes(carte[] unJeu, int[] e)
+		private static void echangeDeCartes(carte[] unJeu, int[] e){}
 		// Calcule et retourne la combinaison (paire, double-paire…) pour un jeu complet de 5 cartes
 		// La valeur retournée est un élement de l'énumération 'combinaison'
-		private static combinaison chercheCombinaison(carte[] unJeu)
+		private static combinaison chercheCombinaison(carte[] unJeu){}
 		
-		private static void afficheResultat(carte [] unJeu)
+		private static void afficheResultat(carte [] unJeu){}
 		// Enregistrer le jeu dans un fichier
 			
-		private static void enregistrerJeu(carte [] unJeu)
+		private static void enregistrerJeu(carte [] unJeu){}
 		// Voir les scores depuis le fichier private static void voirScores()
 		// Jouer au poker
 		
 		// Voir les scores depuis le fichier 
-		private static void voirScores()
+		private static void voirScores(){}
 		
-		public static void jouerAuPoker(carte [] leJeu)
+		public static void jouerAuPoker(carte [] unJeu){}
 		// Affiche le menu du jeu et retourne l'option choisie public static char afficherMenu()
 		
 		// Affiche le menu du jeu et retourne l'option choisie 
-		public static char afficherMenu()
+		public static char afficherMenu(){}
 	}
 }
