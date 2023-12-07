@@ -77,8 +77,12 @@ namespace Poker
         public static carte tirage()
         {
             Random rnd = new Random();
-			new carte = {valeur = valeurs[rnd], famille = familles[rnd]};
-			return carte;
+            int x = rnd.Next(0,12);
+            int y = rnd.Next(0,3);
+            carte unecarte = new carte{};
+			unecarte.famille = familles[y];
+			unecarte.valeur = valeurs[x];
+			return unecarte;
         }
 
         // Indique si une carte est déjà présente dans le jeu
@@ -115,9 +119,28 @@ namespace Poker
         }
 
         // Pour afficher le Menu pricipale
-        private static void afficheMenu()
-        {
-			//a faire
+        private static void afficheMenu(){
+        	
+        	Console.WriteLine("*------------*");
+			for (int i = 1; i < 7; i++) {
+        		if (i == 2) {
+        			Console.WriteLine("|    POKER   |");
+        		}
+        		if (i == 4) {
+        			Console.WriteLine("|  1 JOUER   |");
+        		}
+        		if (i == 5) {
+        			Console.WriteLine("|   2 score  |");
+        		}
+        		if (i == 6) {
+        			Console.WriteLine("|    3 Fin   |");
+        		}
+        		else
+        		{
+        			Console.WriteLine("|            |");
+        		} 
+			}
+        	Console.WriteLine("*------------*");
         }
 
         // Jouer au Poker
