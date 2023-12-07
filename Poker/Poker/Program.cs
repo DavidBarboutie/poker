@@ -121,26 +121,25 @@ namespace Poker
         // Pour afficher le Menu pricipale
         private static void afficheMenu(){
         	
-        	Console.WriteLine("*------------*");
+        	Console.WriteLine("*-------------*");
 			for (int i = 1; i < 7; i++) {
         		if (i == 2) {
-        			Console.WriteLine("|    POKER   |");
+        			Console.WriteLine("|    POKER    |");
         		}
         		if (i == 4) {
-        			Console.WriteLine("|  1 JOUER   |");
+        			Console.WriteLine("|   1 JOUER   |");
         		}
         		if (i == 5) {
-        			Console.WriteLine("|   2 score  |");
+        			Console.WriteLine("|   2 score   |");
         		}
         		if (i == 6) {
-        			Console.WriteLine("|    3 Fin   |");
+        			Console.WriteLine("|   3 Fin     |");
         		}
-        		else
-        		{
-        			Console.WriteLine("|            |");
+        		if (i == 1 || i == 3 || i == 7) {
+        			Console.WriteLine("|             |");
         		} 
 			}
-        	Console.WriteLine("*------------*");
+        	Console.WriteLine("*-------------*");
         }
 
         // Jouer au Poker
