@@ -67,6 +67,8 @@ namespace Poker
 
         // Jeu de 5 cartes
         public static carte[] MonJeu = new carte[5];
+        
+        public static Random rnd = new Random();
 
         //----------
         // FONCTIONS
@@ -76,7 +78,6 @@ namespace Poker
         // Retourne une expression de type "structure carte"
         public static carte tirage()
         {
-            Random rnd = new Random();
             int x = rnd.Next(0,12);
             int y = rnd.Next(0,3);
             carte unecarte = new carte{};
@@ -88,14 +89,14 @@ namespace Poker
         // Indique si une carte est déjà présente dans le jeu
         // Paramètres : une carte, le jeu 5 cartes, le numéro de la carte dans le jeu
         // Retourne un entier (booléen)
-        public static bool carteUnique(carte uneCarte, carte[] unJeu, int numero)
+        public static bool carteUnique(carte uneCarte, carte[] unJeu)
         {
-			foreach(carte element in unJeu){
-				if (element.valeur == uneCarte.valeur && element.famille == uneCarte.famille) {
-					return true;
+			for (int i = 0; i < 5; i++) {
+        		if (uneCarte.valeur.ToString() == unJeu[i].valeur.ToString() && uneCarte.famille.ToString() == unJeu[i].famille.ToString()) {
+					return false;
 				}
 			}
-			return false;
+        	return true;
         }
 
         // Calcule et retourne la COMBINAISON (paire, double-paire... , quinte-flush)
@@ -113,9 +114,9 @@ namespace Poker
         // Paramètres : le tableau de 5 cartes et le tableau des numéros des cartes à échanger
         private static void echangeCarte(carte[] unJeu, int[] e)
         {
-			carte temp = unJeu[e[0]];
-			unJeu[e[0]] = unJeu[e[1]];
-			unJeu[e[1]] = temp;
+        	for (int i = 0; i < e.Length; i++) {
+        	unJeu[e[i]] = tirage();
+        	}
         }
 
         // Pour afficher le Menu pricipale
@@ -146,16 +147,42 @@ namespace Poker
 		// Ici que vous appellez toutes les fonction permettant de joueur au poker
         private static void jouerAuPoker()
         {
-			//a faire
+        	//clear la console
+        	Console.Clear();
+        	
+        	//creer un deck
+        	tirageDuJeu(MonJeu);
+        	
+        	//affiche le deck
+        	affichageCarte();
+        	Console.WriteLine("nombre de cartes a echanger <1-5>");
+        	int nbr = Console.Read();
+        	int[] var = new int[nbr];
+        	for (int i = 0; i < nbr; i++) {
+        		Console.WriteLine("cartes a échanger <0-4>");
+        		var[i] = Console.Read();
+        	}
+        	echangeCarte(MonJeu, var);
+        	affichageCarte();
         }
-
         // Tirage d'un jeu de 5 cartes
         // Paramètre : le tableau de 5 cartes à remplir
         private static void tirageDuJeu(carte[] unJeu)
         {
-			for (int i = 0; i < 5; i++) {
-				unJeu[i] = tirage();
-		}
+        	int I = 0;
+        	
+        	while (I < 5) {
+        		//tire une carte aléatoire
+				carte c = tirage();
+
+				//verifie si la carte se trouve dans le deck
+				if (carteUnique(c,unJeu) == true){
+					
+					//ajoute la carte au deck
+					unJeu[I] = c;
+					I++;
+				}
+			}
         }
 
         // Affiche à l'écran une carte {valeur;famille} 
