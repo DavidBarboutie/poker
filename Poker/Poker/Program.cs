@@ -85,6 +85,7 @@ namespace Poker
 			unecarte.valeur = valeurs[x];
 			return unecarte;
         }
+  
 
         // Indique si une carte est déjà présente dans le jeu
         // Paramètres : une carte, le jeu 5 cartes, le numéro de la carte dans le jeu
@@ -104,8 +105,71 @@ namespace Poker
         // La valeur retournée est un élement de l'énumération 'combinaison' (=constante)
         public static combinaison chercheCombinaison(ref carte[] unJeu)
         {
+        	// a completer; manquant = suite, quinte flush, full, couleur
+        	
+			int [] similaire = {0,0,0,0,0};
+			int [] meme_famille = {0,0,0,0,0};
+			char [,] quintes = {{'X','V','D','R','A'},{'9','X','V','D','R'},{'8','9','X','V','D'},{'7','8','9','X','V'}};
+			int couleur = 0;
+			int cpt_brelan = 0;
+			int cpt_paires = 0;
+			int cpt_un = 0;
 			
 			
+			//completion du tableau similaire
+			for (int i = 0; i < 5; i++) {
+				for (int j = 0; j < 5; j++) {
+					if (unJeu[i].valeur == unJeu[j].valeur) {
+						similaire[i] = similaire[i] + 1;
+					}
+				}
+			}
+			
+			//completion du tableau meme_famille
+			for (int i = 0; i < 5; i++) {
+				for (int j = 0; j < 5; j++) {
+					if (unJeu[i].famille == unJeu[j].famille) {
+						meme_famille[i] = meme_famille[i] + 1;
+					}
+				}
+			}
+			
+			//verifie si couleur
+			for (int i = 0; i < 5; i++) {
+				if (meme_famille[i] == 5) {
+					couleur++;
+				}
+			}
+			
+			for (int i = 0; i < 5; i++) {
+				
+				//verifie si carre
+				if (similaire[i] == 4) {
+					return combinaison.CARRE;
+				}
+				
+				//verifie si brelan
+				if (similaire[i] == 3) {
+					cpt_brelan++;
+				}
+				
+				//verifie si paires
+				if (similaire[i] == 2) {
+					cpt_paires++;
+				}
+				
+				//verifie si toutes les cartes sont differentes
+				if (similaire[i] == 1) {
+					cpt_un++;
+				}
+			}
+			
+			if (cpt_paires / 2 == 2) {
+				return combinaison.DOUBLE_PAIRE;
+			}
+			if (cpt_paires/2==1) {
+				return combinaison.PAIRE;
+			}
 			//cas ou rien n'est présent
 			return combinaison.RIEN;
         }
@@ -155,15 +219,35 @@ namespace Poker
         	
         	//affiche le deck
         	affichageCarte();
+        	
+        	//combien de cartes a echanger
         	Console.WriteLine("nombre de cartes a echanger <1-5>");
-        	int nbr = Console.Read();
-        	int[] var = new int[nbr];
-        	for (int i = 0; i < nbr; i++) {
-        		Console.WriteLine("cartes a échanger <0-4>");
-        		var[i] = Console.Read();
+        	char saisies = (char)_getche();
+        	int saisie = int.Parse(saisies.ToString());
+        	int[] e = new int[saisie];
+        	
+        	//quelles cartes a echanger
+        	for (int i = 0; i < saisie; i++) {
+        		Console.WriteLine("\n nombre de cartes a echanger <0-4>");
+        		char entrer = (char)_getche();
+        		e[i] = int.Parse(entrer.ToString());
         	}
-        	echangeCarte(MonJeu, var);
+        	
+			Console.Clear();
+			
+			//echange les cartes designer
+        	echangeCarte(MonJeu, e);
+        	
+        	//affiche les nouvelles cartes
         	affichageCarte();
+        	
+        	//affiche les resultats
+        	afficheResultat(MonJeu);
+        	
+ 			//permet de ne pas reafficher le menu avant d'avoir appuyer sur une touche quelconque 
+ 			enregistrerJeu(MonJeu);
+        	Console.ReadKey();
+        	Console.Clear();
         }
         // Tirage d'un jeu de 5 cartes
         // Paramètre : le tableau de 5 cartes à remplir
@@ -184,7 +268,53 @@ namespace Poker
 				}
 			}
         }
+		
+        //fonction temporaire pour tester facilement les combinaisons en creant artificiellement un deck
+        private static void tirageDuJeu2(carte[] unJeu)
+        {
 
+				carte c1 = new carte{};
+				carte c2 = new carte{};
+				carte c3 = new carte{};
+				carte c4 = new carte{};
+				carte c5 = new carte{};
+				
+				c1.famille = familles[0];
+				c1.valeur = valeurs[2];
+				
+				c2.famille = familles[1];
+				c2.valeur = valeurs[2];
+				
+				c3.famille = familles[2];
+				c3.valeur = valeurs[2];
+				
+				c4.famille = familles[3];
+				c4.valeur = valeurs[2];
+				
+				c5.famille = familles[1];
+				c5.valeur = valeurs[3];
+				
+				for (int i = 0; i < 1; i++) {
+					unJeu[i] = c1;
+				}
+				for (int i = 1; i < 2; i++) {
+					unJeu[i] = c2;
+				}
+				for (int i = 2; i < 3; i++) {
+					unJeu[i] = c3;
+				}
+				for (int i = 3; i < 4; i++) {
+					unJeu[i] = c4;
+				}
+				for (int i = 4; i < 5; i++) {
+					unJeu[i] = c5;
+				}
+				
+					
+
+		}
+		
+        
         // Affiche à l'écran une carte {valeur;famille} 
         private static void affichageCarte()
         {
@@ -237,7 +367,20 @@ namespace Poker
         // Enregistre le score dans le txt
         private static void enregistrerJeu(carte[] unJeu)
         {
-          //a faire
+        	SetConsoleTextAttribute(hConsole, 10);
+        	string nom, ligne;
+			BinaryWriter f; // Variable FICHIER
+			// Ouverture du fichier en AJOUT
+			// Si le fichier EXISTE : ajout à la fin sinon création du fichier
+			
+			f = new BinaryWriter(new FileStream("scores.txt", FileMode.Append, FileAccess.Write));
+        	Console.WriteLine("Enregistrer le jeu ? <O/N> ");
+        	char choix = (char)_getche();
+        	if (choix.ToString() == "n" || choix.ToString() == "N") {
+        		Console.WriteLine("vous avez choisi de ne pas enregistrer le jeu");
+        	}
+        	if (choix.ToString() == "o" || choix.ToString() == "O") {
+        	}
         }
 
         // Affiche le Scores
@@ -254,7 +397,7 @@ namespace Poker
             try
             {
                 // Test de la combinaison
-                switch (chercheCombinaison(ref MonJeu))
+                switch (chercheCombinaison(ref unJeu))
                 {
                     case combinaison.RIEN:
                         Console.WriteLine("rien du tout... desole!"); break;
@@ -296,7 +439,6 @@ namespace Poker
                 if (reponse != '1' && reponse != '2' && reponse != '3')
                 {
                     Console.Clear();
-                    afficheMenu();
                 }
                 else
                 {
@@ -306,6 +448,7 @@ namespace Poker
                 {
                     int i = 0;
                     jouerAuPoker();
+                    
                 }
 
                 if (reponse == '2')
