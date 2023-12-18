@@ -105,16 +105,15 @@ namespace Poker
         // La valeur retournée est un élement de l'énumération 'combinaison' (=constante)
         public static combinaison chercheCombinaison(ref carte[] unJeu)
         {
-        	// a completer; manquant = suite, quinte flush, full, couleur
         	
 			int [] similaire = {0,0,0,0,0};
 			int [] meme_famille = {0,0,0,0,0};
 			char [,] quintes = {{'X','V','D','R','A'},{'9','X','V','D','R'},{'8','9','X','V','D'},{'7','8','9','X','V'}};
-			int couleur = 0;
+			bool couleur = false;
 			int cpt_brelan = 0;
 			int cpt_paires = 0;
 			int cpt_un = 0;
-			
+			int cpt_quinte;
 			
 			//completion du tableau similaire
 			for (int i = 0; i < 5; i++) {
@@ -137,12 +136,12 @@ namespace Poker
 			//verifie si couleur
 			for (int i = 0; i < 5; i++) {
 				if (meme_famille[i] == 5) {
-					couleur++;
+					couleur = true;
 				}
 			}
 			
 			for (int i = 0; i < 5; i++) {
-				
+				Console.WriteLine(similaire[i]);
 				//verifie si carre
 				if (similaire[i] == 4) {
 					return combinaison.CARRE;
@@ -164,9 +163,44 @@ namespace Poker
 				}
 			}
 			
+			//verifie si quinte
+			for (int i = 0; i < 4; i++) {
+				cpt_quinte = 0;
+				for (int j = 0; j < 5; j++) {
+					for (int k = 0; k < 5; k++) {
+						if (unJeu[k].valeur == quintes[i,j]) {
+							cpt_quinte++;
+						}
+					}
+					if (cpt_quinte == 5 && couleur == true && cpt_paires == 0 && cpt_brelan == 0) {
+						return combinaison.QUINTE_FLUSH;
+					}
+					if (cpt_quinte == 5 && cpt_paires == 0 && cpt_brelan == 0 && couleur == false) {
+						return combinaison.QUINTE;
+					}
+				}
+			}
+			
+			//couleur
+			if (couleur == true) {
+				return combinaison.COULEUR;
+			}
+			
+			//verifie si full
+			if (cpt_paires == 2 && cpt_brelan == 3) {
+				return combinaison.FULL;
+			}
+			//verifie si brelan
+			if (cpt_brelan == 3) {
+				return combinaison.BRELAN;
+			}
+			
+			//verifie double paires
 			if (cpt_paires / 2 == 2) {
 				return combinaison.DOUBLE_PAIRE;
 			}
+			
+			//verifie paire
 			if (cpt_paires/2==1) {
 				return combinaison.PAIRE;
 			}
@@ -215,7 +249,7 @@ namespace Poker
         	Console.Clear();
         	
         	//creer un deck
-        	tirageDuJeu(MonJeu);
+        	tirageDuJeu2(MonJeu);
         	
         	//affiche le deck
         	affichageCarte();
@@ -272,7 +306,6 @@ namespace Poker
         //fonction temporaire pour tester facilement les combinaisons en creant artificiellement un deck
         private static void tirageDuJeu2(carte[] unJeu)
         {
-
 				carte c1 = new carte{};
 				carte c2 = new carte{};
 				carte c3 = new carte{};
@@ -280,38 +313,25 @@ namespace Poker
 				carte c5 = new carte{};
 				
 				c1.famille = familles[0];
-				c1.valeur = valeurs[2];
+				c1.valeur = valeurs[6];
 				
 				c2.famille = familles[1];
-				c2.valeur = valeurs[2];
+				c2.valeur = valeurs[1];
 				
-				c3.famille = familles[2];
+				c3.famille = familles[0];
 				c3.valeur = valeurs[2];
 				
-				c4.famille = familles[3];
+				c4.famille = familles[1];
 				c4.valeur = valeurs[2];
 				
-				c5.famille = familles[1];
-				c5.valeur = valeurs[3];
+				c5.famille = familles[2];
+				c5.valeur = valeurs[2];
 				
-				for (int i = 0; i < 1; i++) {
-					unJeu[i] = c1;
-				}
-				for (int i = 1; i < 2; i++) {
-					unJeu[i] = c2;
-				}
-				for (int i = 2; i < 3; i++) {
-					unJeu[i] = c3;
-				}
-				for (int i = 3; i < 4; i++) {
-					unJeu[i] = c4;
-				}
-				for (int i = 4; i < 5; i++) {
-					unJeu[i] = c5;
-				}
-				
-					
-
+				unJeu[0] = c1;
+				unJeu[1] = c2;
+				unJeu[2] = c3;
+				unJeu[3] = c4;
+				unJeu[4] = c5;
 		}
 		
         
@@ -373,13 +393,16 @@ namespace Poker
 			// Ouverture du fichier en AJOUT
 			// Si le fichier EXISTE : ajout à la fin sinon création du fichier
 			
-			f = new BinaryWriter(new FileStream("scores.txt", FileMode.Append, FileAccess.Write));
+			
         	Console.WriteLine("Enregistrer le jeu ? <O/N> ");
         	char choix = (char)_getche();
         	if (choix.ToString() == "n" || choix.ToString() == "N") {
         		Console.WriteLine("vous avez choisi de ne pas enregistrer le jeu");
         	}
         	if (choix.ToString() == "o" || choix.ToString() == "O") {
+        		Console.WriteLine("quel est votre PSEUDO ?");
+        		char pseudo = (char)_getche();
+
         	}
         }
 
