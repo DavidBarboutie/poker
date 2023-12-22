@@ -424,30 +424,7 @@ namespace Poker
         		
         		//ajout au fichier
         		f.Write(ligne + "\n");
-        		
-        		//tests
-        		ligne = dechiffre(ligne);
-        		f.Write(ligne + "\n");
         	}
-        }
-
-        // Affiche le Scores
-        private static void voirScores()
-        {
-        	string article; // Article à écrire dansle fichier
-        	BinaryReader f; // Variable FICHIER
-        	
-			// Caractères délimiteurs des champs de l'article
-			char [] délimiteurs = {';'};
-			
-			// Une CARTE
-			carte uneCarte;
-			
-			// Nom du joueur 
-			string nom;
-			
-			// Ouverture en LECTURE
-			f = new BinaryReader(new FileStream("scores.txt", FileMode.Open, FileAccess.Read));
         }
         
         //fonction de chiffrement
@@ -511,12 +488,12 @@ namespace Poker
         			}
        			}
       		}
-       	Console.WriteLine(chaine_chiffre);
        	return chaine_chiffre;
         }
         
+        
         //fonction de déchiffrement
-        private static string dechiffre(string chaine){
+		private static string dechiffre(string chaine){
         	
         	//chaine chiffrer
         	string chaine_dechiffre = "";
@@ -574,9 +551,32 @@ namespace Poker
         			}
        			}
       		}
-       	Console.WriteLine(chaine_dechiffre);
        	return chaine_dechiffre;
         }
+
+        // Affiche le Scores
+        private static void voirScores()
+        {
+        	string article; // Article à écrire dansle fichier
+        	BinaryReader f; // Variable FICHIER
+        	
+			// Caractères délimiteurs des champs de l'article
+			char [] délimiteurs = {';'};
+			
+			// Une CARTE
+			carte uneCarte;
+			
+			// Nom du joueur 
+			string nom;
+			
+			// Ouverture en LECTURE
+			f = new BinaryReader(new FileStream("scores.txt", FileMode.Open, FileAccess.Read));
+			string a = Convert.ToString(f.ReadString());
+			a = dechiffre(a);
+			Console.WriteLine(a);
+			Console.ReadKey();
+        }
+        
         
         // Affiche résultat
         private static void afficheResultat(carte[] unJeu)
