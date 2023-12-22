@@ -424,6 +424,10 @@ namespace Poker
         		
         		//ajout au fichier
         		f.Write(ligne + "\n");
+        		
+        		//tests
+        		ligne = dechiffre(ligne);
+        		f.Write(ligne + "\n");
         	}
         }
 
@@ -511,6 +515,68 @@ namespace Poker
        	return chaine_chiffre;
         }
         
+        //fonction de déchiffrement
+        private static string dechiffre(string chaine){
+        	
+        	//chaine chiffrer
+        	string chaine_dechiffre = "";
+        	
+        	//distinguer pseudo et cartes
+        	string[] split = chaine.Split(Convert.ToChar(":"));
+        	string nom = split[0];
+        	string jeu = split[1];
+        	
+        	//alphabets
+        	string[] alpha = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
+        	string[] ALPHA = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+        	
+        	//val
+        	char[] valeurs = { 'A', 'R', 'D', 'V', 'X', '9', '8', '7', '6', '5', '4', '3', '2' };
+			int[] familles = { 3, 4, 5, 6 };
+			
+        	//déchiffrement jeu
+        	string[] val = {"&","ç","@","%","$","^","_","`","|","[","{","#","~"};
+        	string[] famm = {"ù","û","î","ô"};
+        	
+        	//PSEUDO
+        	for (int i = 0; i < nom.Length; i++) {
+        		//parcours de l'alphabet pour chaque caracete du pseudo
+        		for (int j = 0; j < alpha.Length; j++) {
+
+        			//si un caractere est egal
+        			if (nom[i].ToString() == alpha[j] || nom[i].ToString() == ALPHA[j]){
+        				//si le caractere de la chaine est a
+        				if (nom[i].ToString() == "a" || nom[i].ToString() == "A") {
+        					chaine_dechiffre += "z";
+        				}
+        				//si le caractere n'est pas z
+        				else{
+        					chaine_dechiffre += alpha[j-1];
+        				}
+        			}
+        		}
+        	}
+        	chaine_dechiffre += " ";
+        	//JEU
+        	for (int i = 0; i < jeu.Length; i++) {
+        		if (i%2 == 0) {
+        			for (int j = 0; j < valeurs.Length; j++){
+       					if (jeu[i].ToString() == val[j].ToString()) {
+      							chaine_dechiffre += valeurs[j];
+      						}
+       				}
+        		}
+       			else{
+        			for (int j = 0; j < familles.Length; j++) {
+        				if (jeu[i].ToString() == famm[j].ToString()) {
+        					chaine_dechiffre += familles[j];
+        				}
+        			}
+       			}
+      		}
+       	Console.WriteLine(chaine_dechiffre);
+       	return chaine_dechiffre;
+        }
         
         // Affiche résultat
         private static void afficheResultat(carte[] unJeu)
