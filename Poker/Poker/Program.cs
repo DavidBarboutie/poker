@@ -141,7 +141,6 @@ namespace Poker
 			}
 			
 			for (int i = 0; i < 5; i++) {
-				Console.WriteLine(similaire[i]);
 				//verifie si carre
 				if (similaire[i] == 4) {
 					return combinaison.CARRE;
@@ -388,30 +387,131 @@ namespace Poker
         private static void enregistrerJeu(carte[] unJeu)
         {
         	SetConsoleTextAttribute(hConsole, 10);
-        	string nom, ligne;
+        	string nom   = "";
+       		string ligne = "";
 			BinaryWriter f; // Variable FICHIER
 			// Ouverture du fichier en AJOUT
 			// Si le fichier EXISTE : ajout à la fin sinon création du fichier
+			f = new BinaryWriter(new FileStream("scores.txt", FileMode.Append, FileAccess.Write));
 			
-			
+			//demande si enrgistrement
         	Console.WriteLine("Enregistrer le jeu ? <O/N> ");
         	char choix = (char)_getche();
+        	
+        	//si non
         	if (choix.ToString() == "n" || choix.ToString() == "N") {
         		Console.WriteLine("vous avez choisi de ne pas enregistrer le jeu");
         	}
+        	
+        	//si oui
         	if (choix.ToString() == "o" || choix.ToString() == "O") {
-        		Console.WriteLine("quel est votre PSEUDO ?");
-        		char pseudo = (char)_getche();
-
+        		
+        		//entrer du pseudo
+        		Console.WriteLine("\nquel est votre PSEUDO ?");
+        		nom = Console.ReadLine();
+        		
+        		//recuperation du jeu
+        		for (int i = 0; i < 5; i++) {
+        			char carte = unJeu[i].valeur;
+        			int fam = unJeu[i].famille;
+        			ligne = ligne + carte.ToString() + fam.ToString();
+        		}
+        		//mettre l'ensemble de la ligne dans une seule variable pour faciliter le chiffrement
+        		ligne = nom +":"+ ligne;
+        		
+        		//chiffrement en césar
+        		ligne = chiffre(ligne);
+        		
+        		//ajout au fichier
+        		f.Write(ligne + "\n");
         	}
         }
 
         // Affiche le Scores
         private static void voirScores()
         {
-           //a faire
+        	string article; // Article à écrire dansle fichier
+        	BinaryReader f; // Variable FICHIER
+        	
+			// Caractères délimiteurs des champs de l'article
+			char [] délimiteurs = {';'};
+			
+			// Une CARTE
+			carte uneCarte;
+			
+			// Nom du joueur 
+			string nom;
+			
+			// Ouverture en LECTURE
+			f = new BinaryReader(new FileStream("scores.txt", FileMode.Open, FileAccess.Read));
         }
+        
+        //fonction de chiffrement
+        private static string chiffre(string chaine){
+        	
+        	//chaine chiffrer
+        	string chaine_chiffre = "";
+        	
+        	//distinguer pseudo et cartes
+        	string[] split = chaine.Split(Convert.ToChar(":"));
+        	string nom = split[0];
+        	string jeu = split[1];
+        	
+        	//alphabets
+        	string[] alpha = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
+        	string[] ALPHA = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+        	
+        	//val
+        	char[] valeurs = { 'A', 'R', 'D', 'V', 'X', '9', '8', '7', '6', '5', '4', '3', '2' };
+			int[] familles = { 3, 4, 5, 6 };
+			
+        	//chiffrement jeu
+        	string[] val = {"&","ç","@","%","$","^","_","`","|","[","{","#","~"};
+        	string[] famm = {"ù","û","î","ô"};
+        	
+        	//parcours du pseudo
+        	for (int i = 0; i < nom.Length; i++) {
+        		//parcours de l'alphabet pour chaque caracete du pseudo
+        		for (int j = 0; j < alpha.Length; j++) {
 
+        			//PSEUDO
+        			//si un caractere est egal
+        			if (nom[i].ToString() == alpha[j] || nom[i].ToString() == ALPHA[j]){
+        				//si le caractere de la chaine est z
+        				if (nom[i].ToString() == "z" || nom[i].ToString() == "Z") {
+        					chaine_chiffre += "a";
+        				}
+        				//si le caractere n'est pas z
+        				else{
+        					chaine_chiffre += alpha[j+1];
+        					
+        				}
+        			}
+        		}
+        	}
+        	chaine_chiffre += ":";
+        	//JEU
+        	for (int i = 0; i < jeu.Length; i++) {
+        		if (i%2 == 0) {
+        			for (int j = 0; j < valeurs.Length; j++){
+       					if (jeu[i].ToString() == valeurs[j].ToString()) {
+      							chaine_chiffre += val[j];
+      						}
+       				}
+        		}
+       			else{
+        			for (int j = 0; j < familles.Length; j++) {
+        				if (jeu[i].ToString() == familles[j].ToString()) {
+        					chaine_chiffre += famm[j];
+        				}
+        			}
+       			}
+      		}
+       	Console.WriteLine(chaine_chiffre);
+       	return chaine_chiffre;
+        }
+        
+        
         // Affiche résultat
         private static void afficheResultat(carte[] unJeu)
         {
@@ -469,7 +569,6 @@ namespace Poker
                 // Jouer au Poker
                 if (reponse == '1')
                 {
-                    int i = 0;
                     jouerAuPoker();
                     
                 }
