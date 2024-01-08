@@ -212,7 +212,7 @@ namespace Poker
         private static void echangeCarte(carte[] unJeu, int[] e)
         {
         	for (int i = 0; i < e.Length; i++) {
-        	unJeu[e[i]] = tirage();
+        		unJeu[e[i]] = tirage();
         	}
         }
 
@@ -254,25 +254,35 @@ namespace Poker
         	affichageCarte();
         	
         	//combien de cartes a echanger
-        	Console.WriteLine("nombre de cartes a echanger <1-5>");
+        	Console.WriteLine("nombre de cartes a echanger <0-5>");
         	char saisies = (char)_getche();
         	int saisie = int.Parse(saisies.ToString());
-        	int[] e = new int[saisie];
         	
-        	//quelles cartes a echanger
-        	for (int i = 0; i < saisie; i++) {
-        		Console.WriteLine("\n nombre de cartes a echanger <0-4>");
-        		char entrer = (char)_getche();
-        		e[i] = int.Parse(entrer.ToString());
-        	}
-        	
-			Console.Clear();
+        	//si la saisie est entre 1 et 5
+        	if (saisie > 0) {
+        		int[] e = new int[saisie];
+
+	        	//quelles cartes a echanger
+	        	for (int i = 0; i < saisie; i++) {
+	        		Console.WriteLine("\n quelles cartes a echanger <1-5>");
+	        		char entrer = (char)_getche();
+	        		int valeur_a_modifier = int.Parse(entrer.ToString())-1;
+	        		e[i] = valeur_a_modifier;
+	        	}
+	        
+	        	Console.Clear();
 			
-			//echange les cartes designer
-        	echangeCarte(MonJeu, e);
-        	
-        	//affiche les nouvelles cartes
-        	affichageCarte();
+				//echange les cartes designer
+	        	echangeCarte(MonJeu, e);
+	        	
+	        	//affiche les nouvelles cartes
+	        	affichageCarte();
+        	}
+        	else{
+        		Console.Clear();
+        		
+        		affichageCarte();
+        	}
         	
         	//affiche les resultats
         	afficheResultat(MonJeu);
@@ -423,7 +433,7 @@ namespace Poker
         		ligne = chiffre(ligne);
         		
         		//ajout au fichier
-        		f.Write(ligne + "\n");
+        		f.Write(ligne + ";");
         	}
         }
         
@@ -500,57 +510,59 @@ namespace Poker
         	
         	//distinguer pseudo et cartes
         	string[] split = chaine.Split(Convert.ToChar(":"));
-        	string nom = split[0];
-        	string jeu = split[1];
-        	
-        	//alphabets
-        	string[] alpha = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
-        	string[] ALPHA = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
-        	
-        	//val
-        	char[] valeurs = { 'A', 'R', 'D', 'V', 'X', '9', '8', '7', '6', '5', '4', '3', '2' };
-			int[] familles = { 3, 4, 5, 6 };
-			
-        	//déchiffrement jeu
-        	string[] val = {"&","ç","@","%","$","^","_","`","|","[","{","#","~"};
-        	string[] famm = {"ù","û","î","ô"};
-        	
-        	//PSEUDO
-        	for (int i = 0; i < nom.Length; i++) {
-        		//parcours de l'alphabet pour chaque caracete du pseudo
-        		for (int j = 0; j < alpha.Length; j++) {
-
-        			//si un caractere est egal
-        			if (nom[i].ToString() == alpha[j] || nom[i].ToString() == ALPHA[j]){
-        				//si le caractere de la chaine est a
-        				if (nom[i].ToString() == "a" || nom[i].ToString() == "A") {
-        					chaine_dechiffre += "z";
-        				}
-        				//si le caractere n'est pas z
-        				else{
-        					chaine_dechiffre += alpha[j-1];
-        				}
-        			}
-        		}
+        	if (split.Length > 1) {
+        		string nom = split[0];
+	        	string jeu = split[1];
+	        	//alphabets
+	        	string[] alpha = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
+	        	string[] ALPHA = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+	        	
+	        	//val
+	        	char[] valeurs = { 'A', 'R', 'D', 'V', 'X', '9', '8', '7', '6', '5', '4', '3', '2' };
+				int[] familles = { 3, 4, 5, 6 };
+				
+	        	//déchiffrement jeu
+	        	string[] val = {"&","ç","@","%","$","^","_","`","|","[","{","#","~"};
+	        	string[] famm = {"ù","û","î","ô"};
+	        	
+	        	//PSEUDO
+	        	for (int i = 0; i < nom.Length; i++) {
+	        		//parcours de l'alphabet pour chaque caracete du pseudo
+	        		for (int j = 0; j < alpha.Length; j++) {
+	
+	        			//si un caractere est egal
+	        			if (nom[i].ToString() == alpha[j] || nom[i].ToString() == ALPHA[j]){
+	        				//si le caractere de la chaine est a
+	        				if (nom[i].ToString() == "a" || nom[i].ToString() == "A") {
+	        					chaine_dechiffre += "z";
+	        				}
+	        				//si le caractere n'est pas z
+	        				else{
+	        					chaine_dechiffre += alpha[j-1];
+	        				}
+	        			}
+	        		}
+	        	}
+	        	chaine_dechiffre += " ";
+	        	//JEU
+	        	for (int i = 0; i < jeu.Length; i++) {
+	        		if (i%2 == 0) {
+	        			for (int j = 0; j < valeurs.Length; j++){
+	       					if (jeu[i].ToString() == val[j].ToString()) {
+	      							chaine_dechiffre += valeurs[j];
+	      						}
+	       				}
+	        		}
+	       			else{
+	        			for (int j = 0; j < familles.Length; j++) {
+	        				if (jeu[i].ToString() == famm[j].ToString()) {
+	        					chaine_dechiffre += familles[j];
+	        				}
+	        			}
+	       			}
+	      		}
         	}
-        	chaine_dechiffre += " ";
-        	//JEU
-        	for (int i = 0; i < jeu.Length; i++) {
-        		if (i%2 == 0) {
-        			for (int j = 0; j < valeurs.Length; j++){
-       					if (jeu[i].ToString() == val[j].ToString()) {
-      							chaine_dechiffre += valeurs[j];
-      						}
-       				}
-        		}
-       			else{
-        			for (int j = 0; j < familles.Length; j++) {
-        				if (jeu[i].ToString() == famm[j].ToString()) {
-        					chaine_dechiffre += familles[j];
-        				}
-        			}
-       			}
-      		}
+        	else{}	
        	return chaine_dechiffre;
         }
 
@@ -571,9 +583,22 @@ namespace Poker
 			
 			// Ouverture en LECTURE
 			f = new BinaryReader(new FileStream("scores.txt", FileMode.Open, FileAccess.Read));
-			string a = Convert.ToString(f.ReadString());
-			a = dechiffre(a);
-			Console.WriteLine(a);
+			
+			string temp = "";
+			
+			//lecture du fichier en entier
+			while (f.BaseStream.Position != f.BaseStream.Length)
+			{
+				temp += f.ReadString();
+			}
+			
+			//decoupage du fichier selon les joueurs
+			string[] fichier = temp.Split(';');
+			//dechiffrement et affichage de toutes les parties enregistrées
+			for (int i = 0; i < fichier.Length; i++) {
+				string chaine = dechiffre(fichier[i]);
+				Console.WriteLine(chaine);
+			}
 			Console.ReadKey();
         }
         
