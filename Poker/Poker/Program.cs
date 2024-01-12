@@ -69,6 +69,9 @@ namespace Poker
         public static carte[] MonJeu = new carte[5];
         
         public static Random rnd = new Random();
+        
+        //variable de hauteur des cartes dans l'affichage
+        public static int hauteur = 12;
 
         //----------
         // FONCTIONS
@@ -248,7 +251,7 @@ namespace Poker
         	Console.Clear();
         	
         	//creer un deck
-        	tirageDuJeu2(MonJeu);
+        	tirageDuJeu(MonJeu);
         	
         	//affiche le deck
         	affichageCarte();
@@ -312,36 +315,6 @@ namespace Poker
 			}
         }
 		
-        //fonction temporaire pour tester facilement les combinaisons en creant artificiellement un deck
-        private static void tirageDuJeu2(carte[] unJeu)
-        {
-				carte c1 = new carte{};
-				carte c2 = new carte{};
-				carte c3 = new carte{};
-				carte c4 = new carte{};
-				carte c5 = new carte{};
-				
-				c1.famille = familles[0];
-				c1.valeur = valeurs[6];
-				
-				c2.famille = familles[1];
-				c2.valeur = valeurs[1];
-				
-				c3.famille = familles[0];
-				c3.valeur = valeurs[2];
-				
-				c4.famille = familles[1];
-				c4.valeur = valeurs[2];
-				
-				c5.famille = familles[2];
-				c5.valeur = valeurs[2];
-				
-				unJeu[0] = c1;
-				unJeu[1] = c2;
-				unJeu[2] = c3;
-				unJeu[3] = c4;
-				unJeu[4] = c5;
-		}
 		
         
         // Affiche à l'écran une carte {valeur;famille} 
@@ -356,40 +329,42 @@ namespace Poker
             for (int i = 0; i < 5; i++)
             {
                 // Tirage de la carte n°i (le jeu doit être sans doublons !)
-
+				
                 // Affichage de la carte
                 if (MonJeu[i].famille == 3 || MonJeu[i].famille == 4)
                     SetConsoleTextAttribute(hConsole, 252);
                 else
                     SetConsoleTextAttribute(hConsole, 240);
-                Console.SetCursorPosition(left, 5);
+                Console.SetCursorPosition(left, hauteur);
                 Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '*', '-', '-', '-', '-', '-', '-', '-', '-', '-', '*');
-                Console.SetCursorPosition(left, 6);
+                Console.SetCursorPosition(left, hauteur+1);
                 Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)MonJeu[i].famille, ' ', (char)MonJeu[i].famille, ' ', (char)MonJeu[i].famille, ' ', (char)MonJeu[i].famille, ' ', (char)MonJeu[i].famille, '|');
-                Console.SetCursorPosition(left, 7);
+                Console.SetCursorPosition(left, hauteur+2);
                 Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|');
-                Console.SetCursorPosition(left, 8);
+                Console.SetCursorPosition(left, hauteur+3);
                 Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)MonJeu[i].famille, ' ', ' ', ' ', ' ', ' ', ' ', ' ', (char)MonJeu[i].famille, '|');
-                Console.SetCursorPosition(left, 9);
+                Console.SetCursorPosition(left, hauteur+4);
                 Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', ' ', ' ', ' ', (char)MonJeu[i].valeur, (char)MonJeu[i].valeur, (char)MonJeu[i].valeur, ' ', ' ', ' ', '|');
-                Console.SetCursorPosition(left, 10);
+                Console.SetCursorPosition(left, hauteur+5);
                 Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)MonJeu[i].famille, ' ', ' ', (char)MonJeu[i].valeur, (char)MonJeu[i].valeur, (char)MonJeu[i].valeur, ' ', ' ', (char)MonJeu[i].famille, '|');
-                Console.SetCursorPosition(left, 11);
+                Console.SetCursorPosition(left, hauteur+6);
                 Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', ' ', ' ', ' ', (char)MonJeu[i].valeur, (char)MonJeu[i].valeur, (char)MonJeu[i].valeur, ' ', ' ', ' ', '|');
-                Console.SetCursorPosition(left, 12);
+                Console.SetCursorPosition(left, hauteur+7);
                 Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)MonJeu[i].famille, ' ', ' ', ' ', ' ', ' ', ' ', ' ', (char)MonJeu[i].famille, '|');
-                Console.SetCursorPosition(left, 13);
+                Console.SetCursorPosition(left, hauteur+8);
                 Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|');
-                Console.SetCursorPosition(left, 14);
+                Console.SetCursorPosition(left, hauteur+9);
                 Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '|', (char)MonJeu[i].famille, ' ', (char)MonJeu[i].famille, ' ', (char)MonJeu[i].famille, ' ', (char)MonJeu[i].famille, ' ', (char)MonJeu[i].famille, '|');
-                Console.SetCursorPosition(left, 15);
+                Console.SetCursorPosition(left, hauteur+10);
                 Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", '*', '-', '-', '-', '-', '-', '-', '-', '-', '-', '*');
-                Console.SetCursorPosition(left, 16);
+                Console.SetCursorPosition(left, hauteur+11);
                 SetConsoleTextAttribute(hConsole, 10);
                 Console.Write("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}\n", ' ', ' ', ' ', ' ', ' ', c, ' ', ' ', ' ', ' ', ' ');
                 left = left + 15;
                 c++;
+                
             }
+            hauteur += 16;
 
         }
 
@@ -435,6 +410,7 @@ namespace Poker
         		//ajout au fichier
         		f.Write(ligne + ";");
         	}
+        	f.Close();
         }
         
         //fonction de chiffrement
@@ -569,24 +545,19 @@ namespace Poker
         // Affiche le Scores
         private static void voirScores()
         {
-        	string article; // Article à écrire dansle fichier
+
         	BinaryReader f; // Variable FICHIER
         	
 			// Caractères délimiteurs des champs de l'article
 			char [] délimiteurs = {';'};
 			
-			// Une CARTE
-			carte uneCarte;
-			
-			// Nom du joueur 
-			string nom;
-			
 			// Ouverture en LECTURE
 			f = new BinaryReader(new FileStream("scores.txt", FileMode.Open, FileAccess.Read));
 			
 			string temp = "";
-			
+			string chaine ="";
 			//lecture du fichier en entier
+			Console.WriteLine("\n");
 			while (f.BaseStream.Position != f.BaseStream.Length)
 			{
 				temp += f.ReadString();
@@ -595,11 +566,44 @@ namespace Poker
 			//decoupage du fichier selon les joueurs
 			string[] fichier = temp.Split(';');
 			//dechiffrement et affichage de toutes les parties enregistrées
-			for (int i = 0; i < fichier.Length; i++) {
-				string chaine = dechiffre(fichier[i]);
-				Console.WriteLine(chaine);
+			for (int i = 0; i < fichier.Length-1; i++) {
+				chaine = dechiffre(fichier[i]);
+				
+				//separe nom et jeu
+				string[] card = chaine.Split(' ');
+				//affiche le nom du joueur
+				Console.WriteLine(card[0]);
+				//stock le jeu
+				string game = card[1];
+				
+				//instancie les nouvelles cartes
+				carte c = new carte();
+				
+				//compteur permettant dajouter les cartes au bon indices de MonJeu
+				int cpt = 1;
+				
+				//parcours de la chaine de caractere du fichier representant le jeu
+				for (int k = 0; k < 10; k++) {
+					
+					//si l'indicde est pair, le caractere est une valeur de carte
+					if (k % 2 == 0) {
+						c.valeur = game[k];
+					}
+					//si l'indice est impaire le caractere est une famille de carte
+					else{
+						//conversion permettant l'affichage correcte des symboles
+						c.famille = int.Parse(Convert.ToChar(Convert.ToByte(game[k])).ToString());
+						//ajout de la carte dans le jeu
+						MonJeu[k-cpt] = c;
+						cpt++;
+					}
+				}
+				//affiche les jeux enregistrer sous forme de carte
+				affichageCarte();
 			}
+			f.Close();
 			Console.ReadKey();
+			Console.Clear();
         }
         
         
